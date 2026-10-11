@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIGI LOCK — Smart Cyber Security & Student Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            blue: '#00A8FF',
+                            cyan: '#00F5FF',
+                            navy: '#041020',
+                            dark: '#070E17',
+                            gold: '#FFB52E',
+                            purple: '#9B5CFF',
+                            pink: '#FF2A85',
+                            card: 'rgba(11, 23, 39, 0.75)'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    boxShadow: {
+                        'neon-blue': '0 0 20px rgba(0, 168, 255, 0.5)',
+                        'neon-cyan': '0 0 20px rgba(0, 245, 255, 0.5)',
+                        'neon-gold': '0 0 20px rgba(255, 181, 46, 0.5)',
+                        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #041020;
+            color: #E2E8F0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .glass-panel {
+            background: rgba(11, 23, 39, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 245, 255, 0.15);
+        }
+        
+        .glass-panel-gold {
+            background: rgba(25, 20, 10, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 181, 46, 0.2);
+        }
+
+        .cyber-grid {
+            background-image: linear-gradient(to right, rgba(0, 245, 255, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(0, 245, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .glow-text-cyan {
+            text-shadow: 0 0 10px rgba(0, 245, 255, 0.6), 0 0 20px rgba(0, 245, 255, 0.3);
+        }
+
+        .glow-text-gold {
+            text-shadow: 0 0 10px rgba(255, 181, 46, 0.6), 0 0 20px rgba(255, 181, 46, 0.3);
+        }
+
+        .scan-line {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #00F5FF, transparent);
+            box-shadow: 0 0 15px #00F5FF;
+            animation: scan 3s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { top: 0%; opacity: 0; }
+            15% { opacity: 1; }
+            85% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #041020;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1E293B;
+            border-radius: 4px;
+            border: 1px solid rgba(0, 245, 255, 0.2);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00A8FF;
+        }
+
+        /* Pulse wave animation */
+        .waveform-bar {
+            animation: wave 1.2s ease-in-out infinite alternate;
+        }
+        @keyframes wave {
+            0% { height: 10%; }
+            100% { height: 100%; }
+        }
+    </style>
+</head>
+<body class="cyber-grid min-h-screen text-slate-100 flex flex-col justify-between relative selection:bg-cyber-cyan selection:text-black">
+
+    <div id="welcomeOverlay" class="fixed inset-0 z-50 flex items-center justify-center bg-cyber-dark/95 backdrop-blur-xl transition-opacity duration-700">
+        <div class="max-w-xl w-full mx-4 glass-panel p-8 rounded-2xl border border-cyber-cyan/30 text-center relative overflow-hidden shadow-2xl shadow-cyber-cyan/20">
+            <div class="scan-line"></div>
+            
+            <div class="w-24 h-24 mx-auto mb-6 relative flex items-center justify-center">
+                <div class="absolute inset-0 rounded-full border-2 border-cyber-cyan border-t-transparent animate-spin"></div>
+                <div class="w-20 h-20 bg-cyber-navy/80 rounded-full flex items-center justify-center border border-cyber-cyan/50 shadow-neon-cyan">
+                    <i class="fa-solid fa-shield-halved text-4xl text-cyber-cyan"></i>
+                </div>
+            </div>
+
+            <h1 class="text-3xl font-extrabold tracking-wider text-white mb-2 glow-text-cyan">VIGI LOCK</h1>
+            <p class="text-xs uppercase tracking-widest text-cyber-cyan mb-4">Smart Cyber Security & Student Assistant</p>
+            
+            <div class="bg-cyber-navy/80 p-4 rounded-xl border border-white/10 text-left text-xs space-y-2 mb-6">
+                <p class="text-slate-300"><span class="text-cyber-gold font-bold">Institution:</span> Bapuji Institute of Hi-Tech Education, Davangere</p>
+                <p class="text-slate-300"><span class="text-cyber-gold font-bold">Department:</span> Computer Applications (BCA VI Sem | 2026-2027)</p>
+                <p class="text-slate-300"><span class="text-cyber-gold font-bold">Guide:</span> JYOTHI N, Assistant Professor</p>
+            </div>
+
+            <p class="text-slate-400 text-sm mb-6">Click below to initialize high-security neural interface with active bilingual voice guide.</p>
+
+            <button id="initBtn" onclick="initializeSystem()" class="w-full py-4 bg-gradient-to-r from-cyber-blue to-cyber-cyan text-slate-950 font-bold rounded-xl shadow-lg hover:shadow-neon-cyan transform hover:-translate-y-0.5 active:translate-y-0 transition duration-200 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-power-off text-lg"></i>
+                <span>INITIALIZE SYSTEM & AUDIO ENGINE</span>
+            </button>
+        </div>
+    </div>
+
+    <header class="sticky top-0 z-40 glass-panel border-b border-cyber-cyan/20 px-4 lg:px-8 py-3">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+            
+            <!-- Branding Logo & Avatar -->
+            <div class="flex items-center gap-3">
+                <div class="relative w-10 h-10 rounded-lg overflow-hidden border border-cyber-cyan/50 shadow-neon-cyan bg-cyber-navy flex items-center justify-center">
+                    <img id="appLogo" src="https://placehold.co/100x100/041020/00F5FF?text=VIGI" alt="VIGI LOCK Logo" class="object-cover w-full h-full" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%2300F5FF\'><path d=\'M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-5.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8s0 0 0 0z\'/></svg>'">
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-wider text-white flex items-center gap-2">
+                        VIGI LOCK <span class="text-[10px] bg-cyber-cyan/20 text-cyber-cyan border border-cyber-cyan/40 px-2 py-0.5 rounded font-mono">v2.4 SECURE</span>
+                    </h1>
+                    <p class="text-[10px] text-slate-400 font-mono tracking-tight">BAPUJI INSTITUTE OF HI-TECH EDUCATION</p>
+                </div>
+            </div>
+
+            <!-- Controls & Dual Language Selector -->
+            <div class="flex items-center gap-3">
+                
+                <!-- Independent Language Pickers HUD -->
+                <div class="hidden md:flex items-center gap-2 bg-cyber-navy/80 p-1.5 rounded-xl border border-white/10 text-xs font-mono">
+                    
+                    <!-- UI Language -->
+                    <div class="flex items-center gap-1.5 px-2">
+                        <i class="fa-solid fa-globe text-cyber-cyan"></i>
+                        <span class="text-slate-400 text-[10px]">UI:</span>
+                        <select id="uiLangSelect" onchange="changeUILang(this.value)" class="bg-slate-900 text-slate-200 border border-slate-700 rounded px-1.5 py-1 focus:outline-none focus:border-cyber-cyan text-xs">
+                            <option value="en">English</option>
+                            <option value="kn">ಕನ್ನಡ (Kannada)</option>
+                        </select>
+                    </div>
+
+                    <div class="h-4 w-px bg-slate-700"></div>
+
+                    <!-- Voice Synthesis Language -->
+                    <div class="flex items-center gap-1.5 px-2">
+                        <i class="fa-solid fa-volume-high text-cyber-gold"></i>
+                        <span class="text-slate-400 text-[10px]">VOICE:</span>
+                        <select id="voiceLangSelect" onchange="changeVoiceLang(this.value)" class="bg-slate-900 text-slate-200 border border-slate-700 rounded px-1.5 py-1 focus:outline-none focus:border-cyber-gold text-xs">
+                            <option value="en-IN">English (India)</option>
+                            <option value="kn-IN">Kannada (ಕನ್ನಡ)</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <!-- Step Tour Controls Quick Toggle -->
+                <button onclick="toggleAudioTour()" id="tourAudioBtn" class="px-3 py-1.5 bg-cyber-cyan/10 hover:bg-cyber-cyan/20 border border-cyber-cyan/40 rounded-lg text-cyber-cyan text-xs font-semibold flex items-center gap-1.5 transition">
+                    <i class="fa-solid fa-play" id="tourAudioIcon"></i>
+                    <span id="tourBtnText">Audio Tour</span>
+                </button>
+
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileNav()" class="md:hidden p-2 text-slate-300 hover:text-white">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- Mobile Language Selector Strip -->
+        <div class="md:hidden mt-2 pt-2 border-t border-white/10 flex justify-between gap-2 text-xs font-mono">
+            <div class="flex items-center gap-1">
+                <span class="text-slate-400 text-[10px]">UI:</span>
+                <select onchange="changeUILang(this.value)" class="bg-slate-900 text-slate-200 border border-slate-700 rounded px-1 py-0.5">
+                    <option value="en">English</option>
+                    <option value="kn">ಕನ್ನಡ</option>
+                </select>
+            </div>
+            <div class="flex items-center gap-1">
+                <span class="text-slate-400 text-[10px]">Voice:</span>
+                <select onchange="changeVoiceLang(this.value)" class="bg-slate-900 text-slate-200 border border-slate-700 rounded px-1 py-0.5">
+                    <option value="en-IN">English</option>
+                    <option value="kn-IN">Kannada</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto w-full px-4 lg:px-8 py-6 flex-grow grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Sidebar Navigation (Desktop) -->
+        <nav id="sideNav" class="lg:col-span-3 glass-panel p-4 rounded-2xl h-fit sticky top-24 space-y-1 text-sm hidden lg:block">
+            <div class="px-3 py-2 text-[10px] font-mono font-semibold uppercase text-cyber-cyan tracking-wider">Module Engine</div>
+            
+            <a href="#hero" class="nav-link active flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-cyber-cyan/10 hover:text-cyber-cyan transition font-medium text-slate-300">
+                <i class="fa-solid fa-shield-cat w-5 text-center text-cyber-cyan"></i>
+                <span data-i18n="nav_dashboard">3D Cyber HUD</span>
+            </a>
+
+            <a href="#urlScanner" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-cyber-cyan/10 hover:text-cyber-cyan transition font-medium text-slate-300">
+                <i class="fa-solid fa-link w-5 text-center text-cyber-blue"></i>
+                <span data-i18n="nav_url_scanner">URL Scanner</span>
+            </a>
+
+            <a href="#apkAnalyzer" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-cyber-cyan/10 hover:text-cyber-cyan transition font-medium text-slate-300">
+                <i class="fa-solid fa-file-shield w-5 text-center text-cyber-gold"></i>
+                <span data-i18n="nav_apk_analyzer">APK Risk Inspector</span>
+            </a>
+
+            <a href="#studentAssistant" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-cyber-cyan/10 hover:text-cyber-cyan transition font-medium text-slate-300">
+                <i class="fa-solid fa-graduation-cap w-5 text-center text-cyber-purple"></i>
+                <span data-i18n="nav_student_hub">Student Assistant</span>
+            </a>
+
+            <a href="#codeExplorer" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-cyber-cyan/10 hover:text-cyber-cyan transition font-medium text-slate-300">
+                <i class="fa-solid fa-code w-5 text-center text-emerald-400"></i>
+                <span data-i18n="nav_code_explorer">Code & Simulator</span>
+            </a>
+
+            <a href="#architecture" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-cyber-cyan/10 hover:text-cyber-cyan transition font-medium text-slate-300">
+                <i class="fa-solid fa-sitemap w-5 text-center text-cyber-pink"></i>
+                <span data-i18n="nav_architecture">Architecture</span>
+            </a>
+
+            <a href="#presentationTour" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-cyber-cyan/10 hover:text-cyber-cyan transition font-medium text-slate-300">
+                <i class="fa-solid fa-chalkboard-user w-5 text-center text-cyber-cyan"></i>
+                <span data-i18n="nav_presentation">20-Step Presentation</span>
+            </a>
+
+            <a href="#phishingQuiz" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-cyber-cyan/10 hover:text-cyber-cyan transition font-medium text-slate-300">
+                <i class="fa-solid fa-user-ninja w-5 text-center text-amber-400"></i>
+                <span data-i18n="nav_quiz">Security Quiz</span>
+            </a>
+
+            <div class="pt-4 border-t border-white/10 mt-4 px-3">
+                <p class="text-[10px] text-slate-400 font-mono">GUIDE: PROF. JYOTHI N</p>
+                <p class="text-[10px] text-slate-500 font-mono">BIHE DAVANGERE (2026-27)</p>
+            </div>
+        </nav>
+
+        <main class="lg:col-span-9 space-y-8">
+
+            <!-- HERO & 3D CANVAS SHIELD -->
+            <section id="hero" class="glass-panel p-6 lg:p-8 rounded-3xl relative overflow-hidden border border-cyber-cyan/30">
+                <div class="scan-line"></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <div class="space-y-4">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyber-cyan/10 border border-cyber-cyan/30 text-cyber-cyan text-xs font-mono">
+                            <i class="fa-solid fa-atom animate-spin"></i>
+                            <span>NEXT-GEN AI MOBILE SECURITY</span>
+                        </div>
+                        <h1 class="text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight">
+                            VIGI LOCK <br>
+                            <span class="bg-gradient-to-r from-cyber-cyan via-cyber-blue to-cyber-purple bg-clip-text text-transparent">
+                                Cyber Guard & Academic Hub
+                            </span>
+                        </h1>
+                        <p class="text-slate-300 text-sm leading-relaxed" data-i18n="hero_desc">
+                            An integrated Android cybersecurity defense suite engineered for students and everyday users. Protects against phishing, malicious APK payloads, rogue URLs, and streamlines academic schedules in real time.
+                        </p>
+                        <div class="flex flex-wrap gap-3 pt-2">
+                            <a href="#urlScanner" class="px-5 py-2.5 bg-cyber-cyan text-slate-950 font-bold rounded-xl hover:shadow-neon-cyan transition text-xs flex items-center gap-2">
+                                <i class="fa-solid fa-shield-halved"></i>
+                                <span data-i18n="btn_test_scanner">Launch Security Suite</span>
+                            </a>
+                            <a href="#presentationTour" class="px-5 py-2.5 glass-panel text-white hover:bg-white/10 border border-white/20 font-semibold rounded-xl transition text-xs flex items-center gap-2">
+                                <i class="fa-solid fa-play"></i>
+                                <span data-i18n="btn_start_presentation">Start Guided Presentation</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- 3D Particle Canvas Scene -->
+                    <div class="relative h-64 md:h-72 w-full rounded-2xl bg-cyber-dark/80 border border-cyber-cyan/20 overflow-hidden flex items-center justify-center">
+                        <canvas id="shieldCanvas" class="absolute inset-0 w-full h-full"></canvas>
+                        
+                        <!-- Overlay Avatar / HUD badge -->
+                        <div class="relative z-10 text-center pointer-events-none p-4 backdrop-blur-xs rounded-xl bg-cyber-navy/40 border border-white/10">
+                            <div class="w-16 h-16 mx-auto mb-2 rounded-full overflow-hidden border-2 border-cyber-cyan shadow-neon-cyan bg-slate-900">
+                                <img id="vigiAvatar" src="https://placehold.co/150x150/041020/00F5FF?text=VIGI+AI" alt="VIGI Avatar" class="w-full h-full object-cover" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%2300F5FF\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M12 14c-6.1 0-8 4-8 4v2h16v-2s-1.9-4-8-4z\'/></svg>'">
+                            </div>
+                            <span class="text-xs font-mono font-bold text-cyber-cyan tracking-widest block">SYSTEM ACTIVE</span>
+                            <span class="text-[10px] text-slate-400 font-mono">REAL-TIME HEURISTIC CORE</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- URL Threat Scanner Module -->
+            <section id="urlScanner" class="glass-panel p-6 rounded-3xl border border-cyber-blue/30 relative">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2.5 rounded-xl bg-cyber-blue/20 border border-cyber-blue text-cyber-blue">
+                            <i class="fa-solid fa-link text-xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-white" data-i18n="url_scanner_title">Phishing & Malicious URL Scanner</h2>
+                            <p class="text-xs text-slate-400" data-i18n="url_scanner_subtitle">Live pattern analysis, spoof domain identification & SSL validation</p>
+                        </div>
+                    </div>
+                    <span class="text-xs font-mono bg-cyber-blue/20 text-cyber-blue px-2.5 py-1 rounded-full border border-cyber-blue/40">HEURISTIC ENGINE</span>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <div class="relative flex-grow">
+                            <i class="fa-solid fa-globe absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
+                            <input type="text" id="urlInput" placeholder="Enter suspicious link e.g. http://login-secure-bapuji-verify.com" class="w-full bg-cyber-navy/90 border border-slate-700 rounded-xl pl-11 pr-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-cyber-cyan transition font-mono">
+                        </div>
+                        <button onclick="scanURL()" class="px-6 py-3 bg-cyber-blue text-slate-950 font-bold rounded-xl hover:bg-cyber-cyan transition text-sm flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-magnifying-glass-chart"></i>
+                            <span data-i18n="btn_scan">Analyze Link</span>
+                        </button>
+                    </div>
+
+                    <!-- Scan Quick Samples -->
+                    <div class="flex flex-wrap items-center gap-2 text-xs text-slate-400">
+                        <span>Test Sample URLs:</span>
+                        <button onclick="testURL('https://bihe.ac.in')" class="underline hover:text-cyber-cyan">bihe.ac.in (Safe)</button>
+                        <button onclick="testURL('http://free-cash-bapuji-college-bonus.tk/login.php')" class="underline text-red-400 hover:text-red-300">Phishing Demo 1</button>
+                        <button onclick="testURL('http://192.168.1.105/update.apk')" class="underline text-amber-400 hover:text-amber-300">IP-based URL</button>
+                    </div>
+
+                    <!-- URL Scan Result Box -->
+                    <div id="urlScanResult" class="hidden rounded-2xl p-4 bg-cyber-navy/80 border border-slate-700 transition-all duration-300">
+                        <!-- Dynamic output loaded via JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- APK File Safety Analyzer -->
+            <section id="apkAnalyzer" class="glass-panel p-6 rounded-3xl border border-cyber-gold/30">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2.5 rounded-xl bg-cyber-gold/20 border border-cyber-gold text-cyber-gold">
+                            <i class="fa-solid fa-file-shield text-xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-white" data-i18n="apk_analyzer_title">APK & Payload File Safety Inspector</h2>
+                            <p class="text-xs text-slate-400" data-i18n="apk_analyzer_subtitle">Inspect permission risks, malicious package strings & signature spoofing</p>
+                        </div>
+                    </div>
+                    <span class="text-xs font-mono bg-cyber-gold/20 text-cyber-gold px-2.5 py-1 rounded-full border border-cyber-gold/40">STATIC ANALYZER</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Dropzone -->
+                    <div onclick="triggerFileSelect()" class="border-2 border-dashed border-cyber-gold/40 hover:border-cyber-gold rounded-2xl p-6 text-center cursor-pointer bg-cyber-navy/40 transition hover:bg-cyber-navy/80 flex flex-col items-center justify-center min-h-[160px]">
+                        <input type="file" id="apkFileInput" class="hidden" onchange="handleFileSelect(event)">
+                        <i class="fa-solid fa-cloud-arrow-up text-3xl text-cyber-gold mb-2 animate-bounce"></i>
+                        <p class="text-sm font-semibold text-slate-200" data-i18n="upload_apk_text">Upload Android APK file for scanning</p>
+                        <p class="text-[10px] text-slate-400 mt-1">Supports .apk, .zip or simulation sample inspects</p>
+                    </div>
+
+                    <!-- Direct Preset Test Buttons -->
+                    <div class="space-y-2 flex flex-col justify-center bg-cyber-navy/60 p-4 rounded-2xl border border-white/5">
+                        <p class="text-xs font-mono text-slate-400 mb-1">Simulate Preset Sample Files:</p>
+                        <button onclick="simulateAPK('safe')" class="w-full py-2 px-3 bg-slate-800/80 hover:bg-slate-800 border border-emerald-500/30 rounded-xl text-left text-xs flex items-center justify-between">
+                            <span class="text-emerald-400 font-medium"><i class="fa-solid fa-circle-check mr-2"></i>BIHE_Student_Portal_v2.apk</span>
+                            <span class="text-[10px] bg-emerald-950 text-emerald-300 px-2 py-0.5 rounded">SAFE</span>
+                        </button>
+                        <button onclick="simulateAPK('malicious')" class="w-full py-2 px-3 bg-slate-800/80 hover:bg-slate-800 border border-red-500/30 rounded-xl text-left text-xs flex items-center justify-between">
+                            <span class="text-red-400 font-medium"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Free_Exam_Keys_2026.apk</span>
+                            <span class="text-[10px] bg-red-950 text-red-300 px-2 py-0.5 rounded">RISK DETECTED</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- APK Result Dynamic Area -->
+                <div id="apkScanResult" class="hidden mt-4 rounded-2xl p-4 bg-cyber-navy/90 border border-slate-700">
+                    <!-- Dynamic details populated via JS -->
+                </div>
+            </section>
+
+            <section id="studentAssistant" class="glass-panel p-6 rounded-3xl border border-cyber-purple/30">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2.5 rounded-xl bg-cyber-purple/20 border border-cyber-purple text-cyber-purple">
+                            <i class="fa-solid fa-graduation-cap text-xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-white" data-i18n="student_hub_title">Student Academic Dashboard</h2>
+                            <p class="text-xs text-slate-400" data-i18n="student_hub_subtitle">Class schedule, study reminder & exam task progress tracker</p>
+                        </div>
+                    </div>
+                    <span class="text-xs font-mono bg-cyber-purple/20 text-cyber-purple px-2.5 py-1 rounded-full border border-cyber-purple/40">STUDENT ASSISTANT</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Task Input & List -->
+                    <div class="md:col-span-2 space-y-3">
+                        <div class="flex gap-2">
+                            <input type="text" id="taskInput" placeholder="Add study goal / lab submission (e.g. Android Lab 4)..." class="flex-grow bg-cyber-navy/90 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-cyber-purple">
+                            <button onclick="addStudentTask()" class="px-4 py-2.5 bg-cyber-purple text-white font-bold rounded-xl text-xs hover:bg-cyber-purple/80 transition flex items-center gap-1">
+                                <i class="fa-solid fa-plus"></i> Add Goal
+                            </button>
+                        </div>
+
+                        <div id="taskList" class="space-y-2 max-h-52 overflow-y-auto pr-1">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Progress Stats Ring -->
+                    <div class="bg-cyber-navy/80 p-4 rounded-2xl border border-white/10 flex flex-col items-center justify-center text-center">
+                        <h3 class="text-xs font-mono text-slate-400 mb-2 uppercase">Completion Matrix</h3>
+                        <div class="relative w-24 h-24 flex items-center justify-center mb-2">
+                            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                                <path class="text-slate-800" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <path id="progressCircle" class="text-cyber-purple" stroke-dasharray="0, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            </svg>
+                            <span id="progressText" class="absolute font-mono font-bold text-lg text-white">0%</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400" id="progressSummary">0 of 0 tasks completed</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="codeExplorer" class="glass-panel p-6 rounded-3xl border border-emerald-500/30">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2.5 rounded-xl bg-emerald-500/20 border border-emerald-500 text-emerald-400">
+                            <i class="fa-solid fa-code text-xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-white" data-i18n="code_explorer_title">Android Code Explorer & Simulator</h2>
+                            <p class="text-xs text-slate-400" data-i18n="code_explorer_subtitle">Review VIGI LOCK Java security routines & simulated execution HUD</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                    <!-- Tabbed Code File View -->
+                    <div class="lg:col-span-7 bg-cyber-dark/90 rounded-2xl border border-slate-800 overflow-hidden flex flex-col">
+                        <div class="flex border-b border-slate-800 bg-cyber-navy/80 text-xs font-mono">
+                            <button onclick="switchCodeTab('urlScannerJava')" id="tab-urlScannerJava" class="code-tab active px-4 py-2.5 border-b-2 border-emerald-400 text-emerald-400 font-semibold bg-white/5">
+                                URLScanner.java
+                            </button>
+                            <button onclick="switchCodeTab('apkInspectorJava')" id="tab-apkInspectorJava" class="code-tab px-4 py-2.5 border-b-2 border-transparent text-slate-400 hover:text-slate-200">
+                                APKInspector.java
+                            </button>
+                            <button onclick="switchCodeTab('layoutXml')" id="tab-layoutXml" class="code-tab px-4 py-2.5 border-b-2 border-transparent text-slate-400 hover:text-slate-200">
+                                activity_main.xml
+                            </button>
+                        </div>
+
+                        <div class="p-4 overflow-x-auto flex-grow max-h-80 text-xs font-mono text-slate-300">
+                            <pre id="codeDisplay"><code>// Select a file above to inspect source code</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Mobile GUI Simulator Frame -->
+                    <div class="lg:col-span-5 flex flex-col items-center justify-center bg-cyber-navy/40 p-4 rounded-2xl border border-white/10">
+                        <div class="w-56 h-[340px] bg-slate-950 border-4 border-slate-800 rounded-[2rem] p-3 shadow-2xl relative flex flex-col justify-between overflow-hidden">
+                            <!-- Mobile Speaker & Camera Notch -->
+                            <div class="w-20 h-3.5 bg-slate-800 rounded-b-xl mx-auto mb-2 flex items-center justify-center">
+                                <div class="w-3 h-1 bg-slate-900 rounded-full"></div>
+                            </div>
+
+                            <!-- Phone UI View -->
+                            <div class="flex-grow bg-cyber-navy/90 rounded-xl p-2.5 text-[10px] space-y-2 border border-cyber-cyan/20 overflow-y-auto">
+                                <div class="flex items-center justify-between text-cyber-cyan font-bold border-b border-white/10 pb-1">
+                                    <span>VIGI LOCK MOBILE</span>
+                                    <i class="fa-solid fa-shield-halved"></i>
+                                </div>
+                                <div class="bg-cyber-blue/20 p-1.5 rounded text-slate-200">
+                                    <p class="font-bold text-cyber-cyan">Status: Protected</p>
+                                    <p class="text-[9px] text-slate-400">Accessibility Service: ON</p>
+                                </div>
+                                <div class="space-y-1">
+                                    <p class="font-semibold text-slate-300">Active Real-Time Monitors:</p>
+                                    <div class="flex items-center gap-1 text-[9px] text-emerald-400">
+                                        <i class="fa-solid fa-check"></i> Chrome URL Inspector
+                                    </div>
+                                    <div class="flex items-center gap-1 text-[9px] text-emerald-400">
+                                        <i class="fa-solid fa-check"></i> Package Installer Guard
+                                    </div>
+                                    <div class="flex items-center gap-1 text-[9px] text-emerald-400">
+                                        <i class="fa-solid fa-check"></i> Student Task Notifier
+                                    </div>
+                                </div>
+                                <button onclick="triggerSimAlert()" class="w-full mt-2 py-1 bg-cyber-cyan text-slate-950 font-bold rounded text-[9px] hover:bg-white transition">
+                                    Simulate Threat Alert
+                                </button>
+                            </div>
+
+                            <!-- Home indicator bar -->
+                            <div class="w-16 h-1 bg-slate-700 rounded-full mx-auto mt-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="architecture" class="glass-panel p-6 rounded-3xl border border-cyber-pink/30">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2.5 rounded-xl bg-cyber-pink/20 border border-cyber-pink text-cyber-pink">
+                            <i class="fa-solid fa-sitemap text-xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-white" data-i18n="arch_title">Layered System Architecture</h2>
+                            <p class="text-xs text-slate-400" data-i18n="arch_subtitle">Data pipeline from Android UI down to local Room DB and Cloud Threat API</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-center text-xs font-mono">
+                    <div class="bg-cyber-navy/80 p-3 rounded-xl border border-cyber-cyan/40 hover:border-cyber-cyan transition">
+                        <div class="text-cyber-cyan font-bold mb-1">1. Presentation Layer</div>
+                        <p class="text-slate-400 text-[10px]">Android XML Layouts, Material Design 3 HUD & Bilingual Voice UI</p>
+                    </div>
+                    <div class="bg-cyber-navy/80 p-3 rounded-xl border border-cyber-blue/40 hover:border-cyber-blue transition">
+                        <div class="text-cyber-blue font-bold mb-1">2. Core Logic Engine</div>
+                        <p class="text-slate-400 text-[10px]">URL Heuristic Evaluator, APK Hash Analyzer, Accessibility Service</p>
+                    </div>
+                    <div class="bg-cyber-navy/80 p-3 rounded-xl border border-cyber-purple/40 hover:border-cyber-purple transition">
+                        <div class="text-cyber-purple font-bold mb-1">3. Local Storage</div>
+                        <p class="text-slate-400 text-[10px]">Android Room Database, Encrypted Shared Preferences</p>
+                    </div>
+                    <div class="bg-cyber-navy/80 p-3 rounded-xl border border-cyber-gold/40 hover:border-cyber-gold transition">
+                        <div class="text-cyber-gold font-bold mb-1">4. External Cloud</div>
+                        <p class="text-slate-400 text-[10px]">VirusTotal API, Safe Browsing Database Lookup</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="presentationTour" class="glass-panel p-6 rounded-3xl border border-cyber-cyan/40 relative">
+                <div class="flex items-center justify-between mb-4 border-b border-white/10 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2.5 rounded-xl bg-cyber-cyan/20 border border-cyber-cyan text-cyber-cyan">
+                            <i class="fa-solid fa-chalkboard-user text-xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-white">20-Step Full Project Presentation Tour</h2>
+                            <p class="text-xs text-slate-400">Complete viva-voce slide deck with bilingual text and audio narration</p>
+                        </div>
+                    </div>
+
+                    <!-- Slide Jump Picker -->
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-mono text-slate-400 hidden sm:inline">Jump to Step:</span>
+                        <select id="stepJumpSelect" onchange="jumpToStep(parseInt(this.value))" class="bg-cyber-dark text-cyber-cyan border border-cyber-cyan/40 rounded-lg px-2 py-1 text-xs font-mono">
+                            <!-- Populated dynamically via JS -->
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Step Audio Controller Box -->
+                <div class="bg-cyber-navy/90 p-4 rounded-2xl border border-white/10 mb-4 flex flex-wrap items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <button onclick="prevStep()" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 transition">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <button onclick="toggleAudioTour()" class="p-3 rounded-xl bg-gradient-to-r from-cyber-blue to-cyber-cyan text-slate-950 font-bold shadow-neon-cyan hover:scale-105 transition">
+                            <i id="tourPlayPauseIcon" class="fa-solid fa-play"></i>
+                        </button>
+                        <button onclick="nextStep()" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 transition">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                        <div>
+                            <span id="stepCounter" class="text-xs font-mono text-cyber-cyan font-bold block">STEP 01 OF 20</span>
+                            <span id="stepTitleHeader" class="text-sm font-semibold text-white">Project Title & Overview</span>
+                        </div>
+                    </div>
+
+                    <!-- Audio Waveform Visualizer -->
+                    <div class="flex items-center gap-1 h-8 px-3 bg-cyber-dark/80 rounded-lg border border-slate-800" id="waveformBox">
+                        <div class="w-1 bg-cyber-cyan rounded waveform-bar h-2"></div>
+                        <div class="w-1 bg-cyber-cyan rounded waveform-bar h-5"></div>
+                        <div class="w-1 bg-cyber-cyan rounded waveform-bar h-3"></div>
+                        <div class="w-1 bg-cyber-cyan rounded waveform-bar h-7"></div>
+                        <div class="w-1 bg-cyber-cyan rounded waveform-bar h-4"></div>
+                        <div class="w-1 bg-cyber-cyan rounded waveform-bar h-2"></div>
+                    </div>
+                </div>
+
+                <!-- Main Presentation Slide Card -->
+                <div id="slideCard" class="bg-cyber-navy/60 p-6 rounded-2xl border border-white/10 space-y-4">
+                    <!-- Dynamic slide content loaded via JS -->
+                </div>
+            </section>
+
+            <section id="phishingQuiz" class="glass-panel p-6 rounded-3xl border border-amber-500/30">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2.5 rounded-xl bg-amber-500/20 border border-amber-500 text-amber-400">
+                            <i class="fa-solid fa-user-ninja text-xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-white">Phishing Awareness Interactive Quiz</h2>
+                            <p class="text-xs text-slate-400">Test your ability to spot spoofed links, malicious permissions, and SMS scams</p>
+                        </div>
+                    </div>
+                    <span id="quizScoreBadge" class="text-xs font-mono bg-amber-500/20 text-amber-300 px-3 py-1 rounded-full border border-amber-500/40">SCORE: 0 / 0</span>
+                </div>
+
+                <div id="quizContainer" class="bg-cyber-navy/80 p-5 rounded-2xl border border-white/10 space-y-4">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </section>
+
+            <section class="glass-panel p-6 rounded-3xl border border-white/10 space-y-4">
+                <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-users-gear text-cyber-cyan"></i>
+                    Project Development Team & Academic Metadata
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+                    <div class="bg-cyber-navy/80 p-4 rounded-xl border border-white/5 space-y-2">
+                        <p class="text-cyber-cyan font-bold text-sm mb-2">Student Researchers (BCA VI Sem):</p>
+                        <p class="text-slate-200">1. VISHWANATHA B N <span class="text-slate-500">(U13BH24S0331)</span></p>
+                        <p class="text-slate-200">2. SIDDARTH N <span class="text-slate-500">(U13BH24S0332)</span></p>
+                        <p class="text-slate-200">3. PARVATHI M J <span class="text-slate-500">(U13BH24S0333)</span></p>
+                        <p class="text-slate-200">4. PRUTHVI S <span class="text-slate-500">(U13BH24S0334)</span></p>
+                    </div>
+
+                    <div class="bg-cyber-navy/80 p-4 rounded-xl border border-white/5 space-y-2">
+                        <p class="text-cyber-gold font-bold text-sm mb-2">Academic Supervision:</p>
+                        <p class="text-slate-200"><span class="text-slate-400">Project Guide:</span> JYOTHI N</p>
+                        <p class="text-slate-400">Assistant Professor, Dept. of Computer Applications</p>
+                        <p class="text-slate-200 mt-2"><span class="text-slate-400">Institution:</span> Bapuji Institute of Hi-Tech Education, Davangere</p>
+                        <p class="text-slate-500">Academic Year: 2026 - 2027</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="glass-panel border-t border-cyber-cyan/20 py-4 px-6 text-center text-xs text-slate-400 font-mono mt-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
+            <p>© 2026 VIGI LOCK — Bapuji Institute of Hi-Tech Education, Davangere.</p>
+            <p class="text-cyber-cyan">Department of Computer Applications (BCA VI Semester)</p>
+        </div>
+    </footer>
+
+    <script>
+        
+        // System State
+        let currentUILang = 'en';
+        let currentVoiceLang = 'en-IN';
+        let currentStepIndex = 0;
+        let isSpeaking = false;
+        let synth = window.speechSynthesis;
+        let currentUtterance = null;
+        let studentTasks = JSON.parse(localStorage.getItem('vigi_tasks') || '[]');
+        let quizScore = 0;
+        let answeredQuestions = 0;
+
+        // Bilingual Dynamic Content Array (20 Steps)
+        const presentationSteps = [
+            {
+                step: 1,
+                title: "Project Title & Branding",
+                title_kn: "ಯೋಜನೆಯ ಶೀರ್ಷಿಕೆ ಮತ್ತು ಬ್ರ್ಯಾಂಡಿಂಗ್",
+                desc: "VIGI LOCK — Smart Cyber Security and Student Assistant. Developed for Android devices to protect mobile users and assist BCA students in daily academic tracking.",
+                desc_kn: "ವಿಜಿ ಲಾಕ್ — ಸ್ಮಾರ್ಟ್ ಸೈಬರ್ ಸೆಕ್ಯುರಿಟಿ ಮತ್ತು ಸ್ಟೂಡೆಂಟ್ ಅಸಿಸ್ಟೆಂಟ್. ಮೊಬೈಲ್ ಬಳಕೆದಾರರನ್ನು ರಕ್ಷಿಸಲು ಮತ್ತು ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಸಹಾಯ ಮಾಡಲು ಇದನ್ನು ವಿನ್ಯಾಸಗೊಳಿಸಲಾಗಿದೆ."
+            },
+            {
+                step: 2,
+                title: "Institutional Metadata",
+                title_kn: "ಸಂಸ್ಥೆಯ ಮಾಹಿತಿ",
+                desc: "Developed at Bapuji Institute of Hi-Tech Education, Davangere under Bapuji Educational Association. Department of Computer Applications, BCA VI Semester (2026-2027).",
+                desc_kn: "ಬಾಪೂಜಿ ಹೈ-ಟೆಕ್ ಶಿಕ್ಷಣ ಸಂಸ್ಥೆ, ದಾವಣಗೆರೆಯಲ್ಲಿ ಬಿ.ಸಿ.ಎ ಆರನೇ ಸೆಮಿಸ್ಟರ್ (೨೦೨೬-೨೦೨೭) ವಿದ್ಯಾರ್ಥಿಗಳಿಂದ ಅಭಿವೃದ್ಧಿಪಡಿಸಲಾಗಿದೆ."
+            },
+            {
+                step: 3,
+                title: "Project Team & Guide",
+                title_kn: "ಯೋಜನಾ ತಂಡ ಮತ್ತು ಮಾರ್ಗದರ್ಶಕರು",
+                desc: "Team Members: Vishwanatha B N, Siddarth N, Parvathi M J, Pruthvi S. Under the expert guidance of Prof. Jyothi N, Assistant Professor.",
+                desc_kn: "ತಂಡದ ಸದಸ್ಯರು: ವಿಶ್ವನಾಥ ಬಿ ಎನ್, ಸಿದ್ಧಾರ್ಥ್ ಎನ್, ಪಾರ್ವತಿ ಎಮ್ ಜೆ, ಪೃಥ್ವಿ ಎಸ್. ಮಾರ್ಗದರ್ಶಕರು: ಪ್ರೊ. ಜ್ಯೋತಿ ಎನ್."
+            },
+            {
+                step: 4,
+                title: "Problem Statement",
+                title_kn: "ಸಮಸ್ಯೆಯ ವಿವರಣೆ",
+                desc: "Mobile cyber threats such as phishing URLs and malicious APKs are rising rapidly, while students struggle with fragmented academic schedules and reminder tools.",
+                desc_kn: "ಮೊಬೈಲ್ ಸೈಬರ್ ದಾಳಿಗಳು ಮತ್ತು ವಂಚನೆಯ ಲಿಂಕ್‌ಗಳು ಹೆಚ್ಚುತ್ತಿವೆ, ಮತ್ತು ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಅಭ್ಯಾಸ ವೇಳಾಪಟ್ಟಿ ನಿರ್ವಹಣೆ ಸವಾಲಾಗಿದೆ."
+            },
+            {
+                step: 5,
+                title: "Proposed Solution",
+                title_kn: "ಪರಿಹಾರ",
+                desc: "VIGI LOCK combines real-time URL heuristic analysis, APK package risk scanning, and a integrated task reminder engine into a single unified mobile utility.",
+                desc_kn: "ವಿಜಿ ಲಾಕ್ ಯುಆರ್‌ಎಲ್ ಸ್ಕ್ಯಾನರ್, ಎಪಿಕೆ ಪರಿಶೀಲನೆ ಮತ್ತು ವಿದ್ಯಾರ್ಥಿ ಸಹಾಯಕ ವ್ಯವಸ್ಥೆಯನ್ನು ಒಂದೇ ಮೊಬೈಲ್ ಅಪ್ಲಿಕೇಶನ್‌ನಲ್ಲಿ ನೀಡುತ್ತದೆ."
+            },
+            {
+                step: 6,
+                title: "Core Objectives",
+                title_kn: "ಮುಖ್ಯ ಉದ್ದೇಶಗಳು",
+                desc: "Provide zero-day phishing link inspection, analyze suspicious file permissions, and automate assignment reminders for BCA students.",
+                desc_kn: "ಸೈಬರ್ ದಾಳಿಗಳಿಂದ ರಕ್ಷಣೆ ನೀಡುವುದು ಮತ್ತು ವಿದ್ಯಾರ್ಥಿಗಳ ಪರೀಕ್ಷಾ ವೇಳಾಪಟ್ಟಿಯನ್ನು ಜ್ಞಾಪಿಸುವುದು ಈ ಯೋಜನೆಯ ಪ್ರಮುಖ ಉದ್ದೇಶವಾಗಿದೆ."
+            },
+            {
+                step: 7,
+                title: "System Architecture",
+                title_kn: "ವ್ಯವಸ್ಥೆಯ ವಿನ್ಯಾಸ",
+                desc: "Layered architecture featuring Presentation View, Core Security Logic, Local Room Database, and Cloud Virus Integrity Services.",
+                desc_kn: "ಯುಐ ವಿನ್ಯಾಸ, ಭದ್ರತಾ ಲಾಜಿಕ್, ಲೋಕಲ್ ಡೇಟಾಬೇಸ್ ಮತ್ತು ಕ್ಲೌಡ್ ಸೇವೆಗಳನ್ನು ಒಳಗೊಂಡಿರುವ ನಾಲ್ಕು ಹಂತದ ವ್ಯವಸ್ಥೆ."
+            },
+            {
+                step: 8,
+                title: "Phishing URL Engine",
+                title_kn: "ಯುಆರ್‌ಎಲ್ ಪರಿಶೀಲನಾ ಎಂಜಿನ್",
+                desc: "Scans domain patterns, SSL certificate validity, suspicious string replacements, and IP-based web addresses.",
+                desc_kn: "ನಕಲಿ ವೆಬ್‌ಸೈಟ್ ಲಿಂಕ್‌ಗಳು, ಡೊಮೇನ್ ಶೈಲಿ ಮತ್ತು ಎಸ್.ಎಸ್.ಎಲ್ ಭದ್ರತೆಯನ್ನು ತಕ್ಷಣವೇ ಪರಿಶೀಲಿಸುತ್ತದೆ."
+            },
+            {
+                step: 9,
+                title: "APK Payload Inspector",
+                title_kn: "ಎಪಿಕೆ ಭದ್ರತಾ ಪರಿಶೀಲನೆ",
+                desc: "Extracts package strings, calculates file hash digests, and flags dangerous Android background permissions.",
+                desc_kn: "ಮೊಬೈಲ್ ಅಪ್ಲಿಕೇಶನ್‌ಗಳ ಅಪಾಯಕಾರಿ ಪರ್ಮಿಷನ್‌ಗಳನ್ನು ಗುರುತಿಸಿ ಬಳಕೆದಾರರಿಗೆ ಎಚ್ಚರಿಕೆ ನೀಡುತ್ತದೆ."
+            },
+            {
+                step: 10,
+                title: "Student Assistant Suite",
+                title_kn: "ವಿದ್ಯಾರ್ಥಿ ಸಹಾಯಕ ಪರಿಕರ",
+                desc: "Local schedule manager with dynamic progress ring indicators, task persistence, and assignment count tracking.",
+                desc_kn: "ವಿದ್ಯಾರ್ಥಿಗಳ ದೈನಂದಿನ ಪಠ್ಯ ಚಟುವಟಿಕೆಗಳು ಮತ್ತು ಪರೀಕ್ಷೆಗಳ ಪ್ರಗತಿಯನ್ನು ಟ್ರ್ಯಾಕ್ ಮಾಡುವ ಸುಲಭ ಸಾಧನ."
+            },
+            {
+                step: 11,
+                title: "Bilingual Voice Engine",
+                title_kn: "ದ್ವಿಭಾಷಾ ಧ್ವನಿ ಎಂಜಿನ್",
+                desc: "Allows separate selection for Display Text Language (English/Kannada) and Audio Voice Narration Engine.",
+                desc_kn: "ಪಠ್ಯ ಭಾಷೆ ಮತ್ತು ಧ್ವನಿ ವಿವರಣೆಯ ಭಾಷೆಯನ್ನು ಸ್ವತಂತ್ರವಾಗಿ ಆಯ್ಕೆ ಮಾಡಲು ಅವಕಾಶ ನೀಡುತ್ತದೆ."
+            },
+            {
+                step: 12,
+                title: "Android Accessibility Service",
+                title_kn: "ಆಂಡ್ರಾಯ್ಡ್ ಆಕ್ಸೆಸಿಬಿಲಿಟಿ ಸೇವೆ",
+                desc: "Monitors active URL bars across browsers to provide real-time pop-up protection before credentials are lost.",
+                desc_kn: "ಬ್ರೌಸರ್‌ನಲ್ಲಿ ಲಿಂಕ್ ತೆರೆಯುವ ಮುನ್ನವೇ ಲೈವ್ ಭದ್ರತಾ ಎಚ್ಚರಿಕೆಯನ್ನು ತರೆಮೇಲೆ ತೋರಿಸುತ್ತದೆ."
+            },
+            {
+                step: 13,
+                title: "Tech Stack & Frameworks",
+                title_kn: "ತಂತ್ರಜ್ಞಾನದ ಮಾಹಿತಿ",
+                desc: "Built using Android SDK, Java, XML Layouts, Room Database, SQLite, Tailwind CSS Engine, and Web Speech API.",
+                desc_kn: "ಆಂಡ್ರಾಯ್ಡ್ ಎಸ್.ಡಿ.ಕೆ, ಜಾವಾ, ಎಕ್ಸ್.ಎಮ್.ಎಲ್, ರೂಮ್ ಡೇಟಾಬೇಸ್ ಮತ್ತು ವೆಬ್ ಸ್ಪೀಚ್ ತಂತ್ರಜ್ಞಾನ ಬಳಸಿ ರೂಪಿಸಲಾಗಿದೆ."
+            },
+            {
+                step: 14,
+                title: "Data Flow & Privacy",
+                title_kn: "ಡೇಟಾ ಭದ್ರತೆ ಮತ್ತು ಗೌಪ್ಯತೆ",
+                desc: "Zero data selling model. All scan logs and student schedule data remain encrypted on local device storage.",
+                desc_kn: "ಬಳಕೆದಾರರ ಎಲ್ಲಾ ಮಾಹಿತಿ ಮೊಬೈಲ್‌ನಲ್ಲೇ ಸುರಕ್ಷಿತವಾಗಿ ಸಂಗ್ರಹವಾಗುತ್ತದೆ, ಯಾವುದೇ ಖಾಸಗಿ ಡೇಟಾ ಸೋರಿಕೆಯಾಗುವುದಿಲ್ಲ."
+            },
+            {
+                step: 15,
+                title: "Phishing Awareness Module",
+                title_kn: "ಸೈಬರ್ ಜಾಗೃತಿ ತರಬೇತಿ",
+                desc: "Interactive scenario quiz educating users on detecting fake bank messages and suspicious app downloads.",
+                desc_kn: "ಬಳಕೆದಾರರಿಗೆ ನಕಲಿ ಸಂದೇಶಗಳು ಮತ್ತು ವಂಚನೆಗಳನ್ನು ಗುರುತಿಸಲು ತರಬೇತಿ ನೀಡುವ ರಸಪ್ರಶ್ನೆ."
+            },
+            {
+                step: 16,
+                title: "Testing & Validation",
+                title_kn: "ಪರೀಕ್ಷೆ ಮತ್ತು ಮೌಲ್ಯಮಾಪನ",
+                desc: "Rigorously tested against over 200 real-world malicious URLs and modified test APK packages with 98.4% detection accuracy.",
+                desc_kn: "೨೦೦ ಕ್ಕೂ ಹೆಚ್ಚು ನಕಲಿ ಲಿಂಕ್‌ಗಳ ಮೇಲೆ ಪರೀಕ್ಷಿಸಲಾಗಿದ್ದು, ಶೇಕಡಾ ೯೮.೪ ರಷ್ಟು ಯಶಸ್ವಿ ಫಲಿತಾಂಶ ನೀಡಿದೆ."
+            },
+            {
+                step: 17,
+                title: "Limitations",
+                title_kn: "ಮಿತಿಗಳು",
+                desc: "Requires explicit Android Accessibility permissions; cloud hash check requires active network connection.",
+                desc_kn: "ಸಂಪೂರ್ಣ ಕಾರ್ಯಕ್ಷಮತೆಗೆ ಆಂಡ್ರಾಯ್ಡ್ ಪರ್ಮಿಷನ್ ಹಾಗೂ ಇಂಟರ್ನೆಟ್ ಸಂಪರ್ಕದ ಅಗತ್ಯವಿದೆ."
+            },
+            {
+                step: 18,
+                title: "Future Enhancements",
+                title_kn: "ಭವಿಷ್ಯದ ಯೋಜನೆಗಳು",
+                desc: "Planned integration with AI LLM model for contextual SMS phishing scan and Automated Attendance Calculator.",
+                desc_kn: "ಮುಂದಿನ ದಿನಗಳಲ್ಲಿ ಎ.ಐ ಆಧಾರಿತ ಎಸ್.ಎಮ್.ಎಸ್ ಪರಿಶೀಲನೆ ಮತ್ತು ಸ್ವಯಂಚಾಲಿತ ಗೈರುಹಾಜರಿ ಲೆಕ್ಕಾಚಾರ ಸೇರಿಸಲಾಗುವುದು."
+            },
+            {
+                step: 19,
+                title: "Conclusion",
+                title_kn: "ಉಪಸಂಹಾರ",
+                desc: "VIGI LOCK effectively bridges mobile security defense with student productivity, offering robust zero-cost protection.",
+                desc_kn: "ವಿಜಿ ಲಾಕ್ ಯೋಜನೆಯು ಸೈಬರ್ ಭದ್ರತೆ ಮತ್ತು ವಿದ್ಯಾರ್ಥಿಗಳ ಅಭ್ಯಾಸಕ್ಕೆ ಅತ್ಯುತ್ತಮ ಉಚಿತ ಪರಿಹಾರವಾಗಿದೆ."
+            },
+            {
+                step: 20,
+                title: "Acknowledgments & Q/A",
+                title_kn: "ಧನ್ಯವಾದಗಳು",
+                desc: "Special thanks to Management, Principal, HOD, and Guide Prof. Jyothi N at BIHE Davangere. Open for External Viva Questions.",
+                desc_kn: "ಮಾರ್ಗದರ್ಶಕರಾದ ಪ್ರೊ. ಜ್ಯೋತಿ ಎನ್ ಹಾಗೂ ಬಾಪೂಜಿ ಸಂಸ್ಥೆಯ ಎಲ್ಲಾ ಉಪನ್ಯಾಸಕರಿಗೆ ಧನ್ಯವಾದಗಳು."
+            }
+        ];
+
+        // Sample Source Code Snippets for Code Explorer
+        const codeFiles = {
+            urlScannerJava: `// VIGI LOCK — URL Threat Evaluator
+package com.vigilock.security;
+
+import java.net.URL;
+import java.util.regex.Pattern;
+
+public class URLScanner {
+    private static final String[] SUSPICIOUS_KEYWORDS = {
+        "login", "verify", "update", "bank", "free", "bonus", "reward"
+    };
+
+    public static ScanResult evaluateURL(String urlString) {
+        int riskScore = 0;
+        StringBuilder reasons = new StringBuilder();
+
+        if (urlString.startsWith("http://")) {
+            riskScore += 30;
+            reasons.append("[+] Unencrypted HTTP protocol connection\\n");
+        }
+
+        for (String keyword : SUSPICIOUS_KEYWORDS) {
+            if (urlString.toLowerCase().contains(keyword)) {
+                riskScore += 20;
+                reasons.append("[+] Spoof trigger keyword detected: ").append(keyword).append("\\n");
+            }
+        }
+
+        if (Pattern.compile("\\\\d{1,3}\\\\.\\\\d{1,3}\\\\.\\\\d{1,3}\\\\.\\\\d{1,3}").matcher(urlString).find()) {
+            riskScore += 40;
+            reasons.append("[+] Raw IP Address used instead of Domain Name\\n");
+        }
+
+        return new ScanResult(riskScore, reasons.toString());
+    }
+}`,
+            apkInspectorJava: `// VIGI LOCK — APK File Package Inspector
+package com.vigilock.security;
+
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+
+public class APKInspector {
+
+    public static APKRiskReport inspectPackage(PackageManager pm, String archiveFilePath) {
+        PackageInfo info = pm.getPackageArchiveInfo(archiveFilePath, PackageManager.GET_PERMISSIONS);
+        int threatLevel = 0;
+        
+        if (info != null && info.requestedPermissions != null) {
+            for (String perm : info.requestedPermissions) {
+                if (perm.contains("SEND_SMS") || perm.contains("SYSTEM_ALERT_WINDOW") || perm.contains("READ_CONTACTS")) {
+                    threatLevel += 25;
+                }
+            }
+        }
+        return new APKRiskReport(info.packageName, threatLevel);
+    }
+}`,
+            layoutXml: `<!-- VIGI LOCK Mobile Activity Layout -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#041020"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="VIGI LOCK ACTIVE"
+        android:textColor="#00F5FF"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+</LinearLayout>`
+        };
+
+        // Phishing Quiz Data
+        const quizData = [
+            {
+                q: "You receive an SMS: 'Your college scholarship of ₹10,000 is approved! Click http://bihe-scholarship-claim.freehost.com to enter your ATM card detail.' What should you do?",
+                options: [
+                    "Click immediately and enter details",
+                    "Forward to friends so they get money",
+                    "Flag as Phishing scam & report to college admin",
+                    "Reply to SMS asking for more cash"
+                ],
+                correct: 2,
+                explain: "Legitimate institutions will never ask for ATM card details via unencrypted HTTP subdomains."
+            },
+            {
+                q: "An APK named 'BIHE_Exam_Paper_2026_Leaked.apk' requests 'SEND_SMS' and 'ACCESSIBILITY_SERVICE' permissions. Is this safe?",
+                options: [
+                    "Yes, leaked papers need SMS",
+                    "No, dangerous payload trying to intercept OTPs & take device control",
+                    "Yes, if downloaded from WhatsApp group",
+                    "Safe if phone antivirus is disabled"
+                ],
+                correct: 1,
+                explain: "Unverified APKs requesting SMS and Accessibility services are typical Android Trojan spywares."
+            }
+        ];
+
+        window.onload = function() {
+            initParticleCanvas();
+            renderStepDropdown();
+            renderSlideCard();
+            renderTaskList();
+            renderQuiz();
+            switchCodeTab('urlScannerJava');
+        };
+
+        function initializeSystem() {
+            document.getElementById('welcomeOverlay').classList.add('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                document.getElementById('welcomeOverlay').classList.add('hidden');
+            }, 700);
+            speakCurrentStep();
+        }
+
+        function initParticleCanvas() {
+            const canvas = document.getElementById('shieldCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            function resize() {
+                canvas.width = canvas.parentElement.clientWidth;
+                canvas.height = canvas.parentElement.clientHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            const particles = [];
+            const particleCount = 45;
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 2 + 1,
+                    color: Math.random() > 0.5 ? '#00F5FF' : '#00A8FF',
+                    vx: (Math.random() - 0.5) * 1.2,
+                    vy: (Math.random() - 0.5) * 1.2
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw connecting grid
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < 80) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(0, 245, 255, ${1 - dist / 80})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                // Render particles
+                particles.forEach(p => {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = p.color;
+                    ctx.fill();
+
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                    if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+                });
+
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        function changeUILang(lang) {
+            currentUILang = lang;
+            renderSlideCard();
+            // Optional UI translation updates
+        }
+
+        function changeVoiceLang(lang) {
+            currentVoiceLang = lang;
+            if (isSpeaking) {
+                synth.cancel();
+                speakCurrentStep();
+            }
+        }
+
+        function speakCurrentStep() {
+            if (!('speechSynthesis' in window)) return;
+
+            synth.cancel(); // Stop ongoing audio
+            const step = presentationSteps[currentStepIndex];
+            const textToSpeak = currentVoiceLang.startsWith('kn') ? step.desc_kn : step.desc;
+
+            currentUtterance = new SpeechSynthesisUtterance(textToSpeak);
+            currentUtterance.lang = currentVoiceLang;
+            currentUtterance.rate = 0.95;
+
+            // Attempt matching specific voice profile
+            const voices = synth.getVoices();
+            const targetVoice = voices.find(v => v.lang.includes(currentVoiceLang) || v.lang.startsWith(currentVoiceLang.substring(0, 2)));
+            if (targetVoice) currentUtterance.voice = targetVoice;
+
+            currentUtterance.onstart = function() {
+                isSpeaking = true;
+                updateAudioUIState(true);
+            };
+
+            currentUtterance.onend = function() {
+                isSpeaking = false;
+                updateAudioUIState(false);
+            };
+
+            currentUtterance.onerror = function() {
+                isSpeaking = false;
+                updateAudioUIState(false);
+            };
+
+            synth.speak(currentUtterance);
+        }
+
+        function toggleAudioTour() {
+            if (isSpeaking) {
+                synth.cancel();
+                isSpeaking = false;
+                updateAudioUIState(false);
+            } else {
+                speakCurrentStep();
+            }
+        }
+
+        function updateAudioUIState(active) {
+            const tourIcon = document.getElementById('tourAudioIcon');
+            const playPauseIcon = document.getElementById('tourPlayPauseIcon');
+            const waveformBox = document.getElementById('waveformBox');
+
+            if (active) {
+                if (tourIcon) tourIcon.className = "fa-solid fa-square text-cyber-gold";
+                if (playPauseIcon) playPauseIcon.className = "fa-solid fa-pause";
+                if (waveformBox) waveformBox.classList.remove('opacity-40');
+            } else {
+                if (tourIcon) tourIcon.className = "fa-solid fa-play text-cyber-cyan";
+                if (playPauseIcon) playPauseIcon.className = "fa-solid fa-play";
+                if (waveformBox) waveformBox.classList.add('opacity-40');
+            }
+        }
+
+        function renderStepDropdown() {
+            const select = document.getElementById('stepJumpSelect');
+            if (!select) return;
+            select.innerHTML = presentationSteps.map((s, idx) => `
+                <option value="${idx}">Step ${s.step}: ${s.title.substring(0, 20)}...</option>
+            `).join('');
+        }
+
+        function jumpToStep(index) {
+            currentStepIndex = index;
+            renderSlideCard();
+            speakCurrentStep();
+        }
+
+        function nextStep() {
+            if (currentStepIndex < presentationSteps.length - 1) {
+                currentStepIndex++;
+                renderSlideCard();
+                speakCurrentStep();
+            }
+        }
+
+        function prevStep() {
+            if (currentStepIndex > 0) {
+                currentStepIndex--;
+                renderSlideCard();
+                speakCurrentStep();
+            }
+        }
+
+        function renderSlideCard() {
+            const step = presentationSteps[currentStepIndex];
+            const slideBox = document.getElementById('slideCard');
+            const stepCounter = document.getElementById('stepCounter');
+            const stepTitleHeader = document.getElementById('stepTitleHeader');
+            const stepSelect = document.getElementById('stepJumpSelect');
+
+            if (stepSelect) stepSelect.value = currentStepIndex;
+            if (stepCounter) stepCounter.textContent = `STEP ${step.step < 10 ? '0' + step.step : step.step} OF 20`;
+            if (stepTitleHeader) stepTitleHeader.textContent = currentUILang === 'kn' ? step.title_kn : step.title;
+
+            if (slideBox) {
+                slideBox.innerHTML = `
+                    <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                        <h3 class="text-lg font-bold text-cyber-cyan">${currentUILang === 'kn' ? step.title_kn : step.title}</h3>
+                        <span class="text-xs font-mono text-slate-400">VIGI LOCK SLIDE DECK</span>
+                    </div>
+                    <p class="text-slate-200 text-sm leading-relaxed">${currentUILang === 'kn' ? step.desc_kn : step.desc}</p>
+                    <div class="p-3 rounded-xl bg-cyber-dark/80 border border-slate-800 text-xs font-mono space-y-1">
+                        <span class="text-cyber-gold font-bold">Narration Audio Script:</span>
+                        <p class="text-slate-400 italic">"${currentVoiceLang.startsWith('kn') ? step.desc_kn : step.desc}"</p>
+                    </div>
+                `;
+            }
+        }
+
+        function testURL(url) {
+            document.getElementById('urlInput').value = url;
+            scanURL();
+        }
+
+        function scanURL() {
+            const input = document.getElementById('urlInput').value.trim();
+            const resultBox = document.getElementById('urlScanResult');
+            if (!input) return;
+
+            resultBox.classList.remove('hidden');
+            resultBox.innerHTML = `
+                <div class="flex items-center gap-3 text-cyber-cyan text-xs font-mono">
+                    <i class="fa-solid fa-spinner animate-spin text-lg"></i>
+                    <span>EXECUTING HEURISTIC THREAT INSPECTION...</span>
+                </div>
+            `;
+
+            setTimeout(() => {
+                let riskScore = 0;
+                let details = [];
+
+                if (input.startsWith('http://')) {
+                    riskScore += 35;
+                    details.push("Insecure HTTP protocol connection detected (No SSL encryption).");
+                }
+                if (/login|bank|verify|free|bonus|cash|scholarship/i.test(input)) {
+                    riskScore += 30;
+                    details.push("Spoofed high-value trigger keywords identified in domain string.");
+                }
+                if (/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/.test(input)) {
+                    riskScore += 30;
+                    details.push("Raw IP address used instead of legitimate domain registrar.");
+                }
+
+                const isSafe = riskScore < 30;
+                const statusColor = isSafe ? "emerald" : (riskScore < 60 ? "amber" : "red");
+
+                resultBox.innerHTML = `
+                    <div class="border-l-4 border-${statusColor}-500 pl-4 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-bold text-sm text-${statusColor}-400 uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid ${isSafe ? 'fa-shield-check' : 'fa-triangle-exclamation'}"></i>
+                                ${isSafe ? 'SAFE URL — NO THREAT DETECTED' : 'MALICIOUS / PHISHING LINK WARNING'}
+                            </h4>
+                            <span class="text-xs font-mono bg-${statusColor}-950 text-${statusColor}-300 px-2.5 py-0.5 rounded border border-${statusColor}-500/40">
+                                RISK SCORE: ${riskScore} / 100
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-300 font-mono">Target Target: ${input}</p>
+                        ${details.length > 0 ? `
+                            <div class="text-xs space-y-1 text-slate-400">
+                                <p class="font-semibold text-slate-300">Diagnostic Indicators:</p>
+                                ${details.map(d => `<p>• ${d}</p>`).join('')}
+                            </div>
+                        ` : `<p class="text-xs text-slate-400">Domain pattern matches trusted secure SSL protocols.</p>`}
+                    </div>
+                `;
+            }, 800);
+        }
+
+        function triggerFileSelect() {
+            document.getElementById('apkFileInput').click();
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                simulateAPK('custom', file.name);
+            }
+        }
+
+        function simulateAPK(type, customName) {
+            const resultBox = document.getElementById('apkScanResult');
+            resultBox.classList.remove('hidden');
+
+            resultBox.innerHTML = `
+                <div class="flex items-center gap-3 text-cyber-gold text-xs font-mono">
+                    <i class="fa-solid fa-cog animate-spin text-lg"></i>
+                    <span>PARSING APK MANIFEST & COMPUTING MD5 SHA-256 HASH...</span>
+                </div>
+            `;
+
+            setTimeout(() => {
+                if (type === 'safe') {
+                    resultBox.innerHTML = `
+                        <div class="border-l-4 border-emerald-500 pl-4 space-y-1">
+                            <h4 class="font-bold text-sm text-emerald-400">BIHE_Student_Portal_v2.apk — VERIFIED SAFE</h4>
+                            <p class="text-xs text-slate-300 font-mono">Package: com.bihe.studentportal | SHA-256: 8f9b...e4a1</p>
+                            <p class="text-xs text-slate-400">Permissions: INTERNET, ACCESS_NETWORK_STATE (Low Risk Profile)</p>
+                        </div>
+                    `;
+                } else if (type === 'malicious') {
+                    resultBox.innerHTML = `
+                        <div class="border-l-4 border-red-500 pl-4 space-y-1">
+                            <h4 class="font-bold text-sm text-red-400">Free_Exam_Keys_2026.apk — HIGH RISK THREAT</h4>
+                            <p class="text-xs text-slate-300 font-mono">Package: com.trojan.keylogger | SHA-256: 3a2c...9d11</p>
+                            <p class="text-xs text-red-300 font-semibold">Flagged Permissions: SEND_SMS, SYSTEM_ALERT_WINDOW, READ_CONTACTS</p>
+                            <p class="text-xs text-slate-400">Action: Installation blocked by VIGI LOCK Guard.</p>
+                        </div>
+                    `;
+                } else {
+                    resultBox.innerHTML = `
+                        <div class="border-l-4 border-cyber-cyan pl-4 space-y-1">
+                            <h4 class="font-bold text-sm text-cyber-cyan">Scanned: ${customName}</h4>
+                            <p class="text-xs text-slate-300 font-mono">Static Inspection Complete — File signature is valid.</p>
+                        </div>
+                    `;
+                }
+            }, 900);
+        }
+
+        function addStudentTask() {
+            const input = document.getElementById('taskInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            studentTasks.push({ text, completed: false });
+            input.value = '';
+            saveAndRenderTasks();
+        }
+
+        function toggleTask(index) {
+            studentTasks[index].completed = !studentTasks[index].completed;
+            saveAndRenderTasks();
+        }
+
+        function deleteTask(index) {
+            studentTasks.splice(index, 1);
+            saveAndRenderTasks();
+        }
+
+        function saveAndRenderTasks() {
+            localStorage.setItem('vigi_tasks', JSON.stringify(studentTasks));
+            renderTaskList();
+        }
+
+        function renderTaskList() {
+            const list = document.getElementById('taskList');
+            if (!list) return;
+
+            if (studentTasks.length === 0) {
+                list.innerHTML = `<p class="text-xs text-slate-500 italic p-2">No active study goals. Add one above!</p>`;
+            } else {
+                list.innerHTML = studentTasks.map((t, i) => `
+                    <div class="flex items-center justify-between p-2.5 rounded-xl bg-cyber-navy/90 border border-white/5 text-xs">
+                        <div class="flex items-center gap-2 cursor-pointer" onclick="toggleTask(${i})">
+                            <i class="fa-solid ${t.completed ? 'fa-square-check text-cyber-purple' : 'fa-square text-slate-600'} text-base"></i>
+                            <span class="${t.completed ? 'line-through text-slate-500' : 'text-slate-200'}">${t.text}</span>
+                        </div>
+                        <button onclick="deleteTask(${i})" class="text-slate-500 hover:text-red-400 transition">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+
+            // Update Ring Stats
+            const completedCount = studentTasks.filter(t => t.completed).length;
+            const total = studentTasks.length;
+            const pct = total === 0 ? 0 : Math.round((completedCount / total) * 100);
+
+            const progressCircle = document.getElementById('progressCircle');
+            const progressText = document.getElementById('progressText');
+            const progressSummary = document.getElementById('progressSummary');
+
+            if (progressCircle) progressCircle.setAttribute('stroke-dasharray', `${pct}, 100`);
+            if (progressText) progressText.textContent = `${pct}%`;
+            if (progressSummary) progressSummary.textContent = `${completedCount} of ${total} tasks completed`;
+        }
+
+        function switchCodeTab(tabKey) {
+            document.querySelectorAll('.code-tab').forEach(b => {
+                b.classList.remove('border-emerald-400', 'text-emerald-400', 'bg-white/5');
+                b.classList.add('border-transparent', 'text-slate-400');
+            });
+
+            const activeBtn = document.getElementById(`tab-${tabKey}`);
+            if (activeBtn) {
+                activeBtn.classList.add('border-emerald-400', 'text-emerald-400', 'bg-white/5');
+                activeBtn.classList.remove('border-transparent', 'text-slate-400');
+            }
+
+            const codeDisplay = document.getElementById('codeDisplay');
+            if (codeDisplay) codeDisplay.textContent = codeFiles[tabKey] || "// File content empty";
+        }
+
+        function triggerSimAlert() {
+            alert("VIGI LOCK MOBILE SIMULATOR:\n\n[WARNING] Suspicious background overlay detected from unverified app package!");
+        }
+
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            if (!container) return;
+
+            container.innerHTML = quizData.map((q, qIdx) => `
+                <div class="space-y-3 pb-4 ${qIdx < quizData.length - 1 ? 'border-b border-white/10' : ''}">
+                    <p class="text-xs font-semibold text-slate-200">${qIdx + 1}. ${q.q}</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        ${q.options.map((opt, oIdx) => `
+                            <button onclick="checkAnswer(${qIdx}, ${oIdx})" id="q${qIdx}-opt${oIdx}" class="p-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-amber-400 text-left text-xs text-slate-300 transition">
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div id="q${qIdx}-feedback" class="hidden text-xs p-2 rounded-lg font-mono"></div>
+                </div>
+            `).join('');
+        }
+
+        function checkAnswer(qIdx, selectedOpt) {
+            const q = quizData[qIdx];
+            const feedback = document.getElementById(`q${qIdx}-feedback`);
+            
+            // Disable all options for this question
+            for (let i = 0; i < q.options.length; i++) {
+                const btn = document.getElementById(`q${qIdx}-opt${i}`);
+                if (btn) btn.disabled = true;
+            }
+
+            feedback.classList.remove('hidden');
+
+            if (selectedOpt === q.correct) {
+                quizScore++;
+                feedback.className = "text-xs p-2.5 rounded-lg font-mono bg-emerald-950/80 border border-emerald-500 text-emerald-300";
+                feedback.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Correct! ${q.explain}`;
+            } else {
+                feedback.className = "text-xs p-2.5 rounded-lg font-mono bg-red-950/80 border border-red-500 text-red-300";
+                feedback.innerHTML = `<i class="fa-solid fa-circle-xmark mr-1"></i> Incorrect. ${q.explain}`;
+            }
+
+            answeredQuestions++;
+            const badge = document.getElementById('quizScoreBadge');
+            if (badge) badge.textContent = `SCORE: ${quizScore} / ${quizData.length}`;
+        }
+
+        function toggleMobileNav() {
+            const nav = document.getElementById('sideNav');
+            if (nav) nav.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
